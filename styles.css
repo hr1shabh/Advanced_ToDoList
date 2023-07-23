@@ -1,0 +1,230 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f5f5f5;
+}
+
+nav {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-heading {
+  font-size: 24px;
+  margin: 0;
+}
+
+.navbar-search input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+.navbar-search button {
+  font-size: 16px;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.navbar-search button:hover {
+  background-color: #555;
+}
+
+.navbar-sort,
+.navbar-filters {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.navbar-sort label,
+.navbar-filters label {
+  margin-right: 5px;
+}
+
+.navbar-sort select,
+.navbar-filters select,
+#category,
+#priority {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+
+
+.navbar-filters label {
+  margin-right: 5px;
+}
+
+.navbar-filters select,
+#category,
+#priority {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+#applyFiltersButton {
+  font-size: 16px;
+  padding: 8px 15px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#applyFiltersButton:hover {
+  background-color: #555;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container input[type="text"],
+#dueDate {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#todoDescription {
+  height: 100px;
+}
+
+#category,
+#priority {
+  width: 100%; /* Change the width to 100% for both dropdowns */
+}
+
+
+#tags {
+  width: 100%;
+}
+
+.container button {
+  font-size: 16px;
+  padding: 8px 15px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background-color: #555;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+
+li {
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+li input[type="text"],
+li input[type="date"],
+li select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; 
+}
+
+.todo-item-button {
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+.todo-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.todo-description {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.due-date,
+.category,
+.priority,
+.tags {
+  margin-bottom: 5px;
+}
+
+.btn {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.edit-button,
+.save-button,
+.delete-button,
+.mark-as-done-button {
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #47a4f0; 
+}
+
+.save-button {
+  background-color: #5cdb60; 
+  color: white;
+}
+
+.delete-button {
+  background-color: #eb4d42;
+  color: white;
+}
+
+.mark-as-done-button {
+  background-color: #72e476; 
+  color: white;
+}
+

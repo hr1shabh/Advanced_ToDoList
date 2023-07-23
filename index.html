@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo List</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <h1 class="navbar-heading">TodoList</h1>
+      <div class="navbar-search">
+        <input type="text" id="searchItem" placeholder="Search tasks...">
+        <button onclick="searchItem()">Search</button>
+      </div>
+      <div class="navbar-sort">
+        <label for="sort">Sort:</label>
+        <select id="sort" onchange="sortTodoList()">
+          <option value="default">Default</option>
+          <option value="due-date">By Due Date</option>
+          <option value="priority">By Priority</option>
+        </select>
+      </div>
+      <div class="navbar-filters">
+        <label for="dueDateFilter">Due Date:</label>
+        <input type="datetime-local" id="dueDateFilter">
+        
+        <label for="categoryFilter">Category:</label>
+        <select id="categoryFilter">
+          <option value="all">All</option> 
+          <option value="work">Work</option>
+          <option value="study">Study</option>
+          <option value="business">Business</option>
+          <option value="home">Home</option>
+          <option value="personal">Personal</option>
+          <option value="hobby">Hobby</option>
+        </select>
+        <label for="priorityFilter">Priority:</label>
+        <select id="priorityFilter">
+          <option value="none">None</option> 
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <label for="taskStatusFilter">Task Status:</label>
+        <select id="taskStatusFilter">
+          <option value="all">All</option>
+          <option value="marked-done">Marked as Done</option>
+          <option value="marked-undone">Marked as Undone</option>
+          <option value="missing">Missing</option>
+        </select>
+        <button id="applyFiltersButton" onclick="applyFilters()">Apply</button>
+      </div>
+    </div>
+
+  </nav>
+
+  <div class="container">
+    <input type="text" id="todoTitle" placeholder="Todo Title">
+    <input type="text" id="todoDescription" placeholder="Todo Description">
+    <label for="dueDate">Due Date:</label>
+    <input type="datetime-local" id="dueDate">
+    <label for="category">Category:</label>
+    <select id="category">
+      <option value="work">Work</option>
+      <option value="study">Study</option>
+      <option value="business">Business</option>
+      <option value="home">Home</option>
+      <option value="personal">Personal</option>
+      <option value="hobby">Hobby</option>
+    </select>
+    <label for="priority">Priority:</label>
+    <select id="priority">
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+    <input type="text" id="tags" placeholder="Tags (separated by commas)">
+    <button onclick="addItem()">Add</button>
+    <ul id="todoList">
+      <!-- List items will be added here -->
+    </ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
