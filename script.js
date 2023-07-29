@@ -88,6 +88,34 @@ function applyFilters() {
   renderTodoList(filteredItems); 
 }
 
+// Add the following function at the end of your script.js file
+function autoCompleteDueDate() {
+  const todoDescription = document.getElementById("todoDescription").value.trim().toLowerCase();
+
+  if (todoDescription.includes("today")) {
+    const dueDateInput = document.getElementById("dueDate");
+    const today = new Date();
+    today.setHours(23, 59, 0, 0);
+    dueDateInput.value = getFormattedDateTime(today);
+  } else if (todoDescription.includes("tomorrow")) {
+    const dueDateInput = document.getElementById("dueDate");
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(23, 59, 0, 0);
+    dueDateInput.value = getFormattedDateTime(tomorrow);
+  } else {
+    const dateRegex = /(\d{1,2}(st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{4}\s+(\d{1,2}:\d{2}\s*(am|pm))?)|(\d{1,2}(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{4}\s+(\d{1,2}:\d{2}\s*(am|pm))?)/;
+    const match = todoDescription.match(dateRegex);
+
+    if (match) {
+      const dueDateInput = document.getElementById("dueDate");
+      const date = new Date(match[0]);
+      dueDateInput.value = getFormattedDateTime(date);
+      document.getElementById("todoDescription").value = todoDescription.replace(match[0], "").trim();
+    }
+  }
+}
+
 let subtasksArray = []; // Array to store subtasks
 
 function addSubtask() {
@@ -393,3 +421,5 @@ function loadTodoList() {
 
 loadTodoList();
 renderTodoList();
+const descriptionInput = document.getElementById("todoDescription");
+descriptionInput.addEventListener("input", autoCompleteDueDate);
