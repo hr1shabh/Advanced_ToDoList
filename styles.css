@@ -186,11 +186,22 @@ li select {
   margin-bottom: 8px;
 }
 
-.due-date,
-.category,
-.priority,
+
 .tags {
   margin-bottom: 5px;
+}
+.due-date,
+.category,
+.priority
+ {
+
+  text-align: center;
+  margin-bottom: 5px;
+}
+.minicontainerdiv{
+  display: flex;
+  margin: 0 5px; /* Adjust this value to control the spacing between items */
+  text-align: center;
 }
 
 .btn {
@@ -227,4 +238,65 @@ li select {
   background-color: #72e476; 
   color: white;
 }
+.miniContainer{
+  display: flex;
+  justify-content: space-between;
+}
 
+/* Add the following CSS to your styles.css file */
+.todo-subtasks {
+  margin-top: 10px;
+}
+
+.subtask-input-container div {
+  display: flex;
+  align-items: center;
+}
+
+.subtask-input-container input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.subtask-input-container span {
+  display: inline-block;
+}
+
+.subtask-done {
+  text-decoration: line-through;
+}
+.todo-subtasks{
+  margin-bottom: 10px;
+}
+
+/* Styling for the reminder section */
+
+/* Container that holds reminder inputs */
+.reminders {
+  margin-top: 20px;
+}
+
+/* Styling for each individual reminder input */
+.reminder-input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styling for the "Add Reminder" button */
+.add-reminder-button {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-reminder-button:hover {
+  background-color: #45a049;
+}

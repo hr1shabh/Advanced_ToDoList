@@ -57,6 +57,7 @@
   <div class="container">
     <input type="text" id="todoTitle" placeholder="Todo Title">
     <input type="text" id="todoDescription" placeholder="Todo Description">
+    
     <label for="dueDate">Due Date:</label>
     <input type="datetime-local" id="dueDate">
     <label for="category">Category:</label>
@@ -75,6 +76,14 @@
       <option value="high">High</option>
     </select>
     <input type="text" id="tags" placeholder="Tags (separated by commas)">
+    <label for="subtasks">Subtasks:</label>
+    <div class="subtasks" id="subtasksContainer">
+      <!-- Subtask input template -->
+      <input type="text" class="subtask-input" placeholder="Subtask 1">
+      <!-- Add more subtask inputs using JavaScript -->
+    </div>
+    <button class="add-subtask-button" onclick="addSubtask()">Add Subtask</button>
+    
     <button onclick="addItem()">Add</button>
     <ul id="todoList">
       <!-- List items will be added here -->

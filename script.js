@@ -88,10 +88,50 @@ function applyFilters() {
   renderTodoList(filteredItems); 
 }
 
+let subtasksArray = []; // Array to store subtasks
+
+function addSubtask() {
+  const subtasksContainer = document.getElementById("subtasksContainer");
+  const subtaskInputs = subtasksContainer.getElementsByClassName("subtask-input");
+
+  // Collect values of all subtask inputs
+  const subtaskValues = [];
+  for (const input of subtaskInputs) {
+    subtaskValues.push(input.value);
+  }
+
+  // Add the subtask values to the subtasksArray
+  subtasksArray = subtaskValues.filter(value => value.trim() !== '');
+
+  // Clear the existing subtask inputs
+  subtasksContainer.innerHTML = '';
+
+  // Re-create subtask inputs with updated values
+  for (let i = 0; i < subtasksArray.length; i++) {
+    const subtaskInput = document.createElement("input");
+    subtaskInput.type = "text";
+    subtaskInput.className = "subtask-input";
+    subtaskInput.placeholder = `Subtask ${i + 1}`;
+    subtaskInput.value = subtasksArray[i];
+    subtasksContainer.appendChild(subtaskInput);
+  }
+
+  // Add one additional empty subtask input
+  const newSubtaskInput = document.createElement("input");
+  newSubtaskInput.type = "text";
+  newSubtaskInput.className = "subtask-input";
+  newSubtaskInput.placeholder = `Subtask ${subtasksArray.length + 1}`;
+  subtasksContainer.appendChild(newSubtaskInput);
+}
+
+
+// Rest of the code remains the same...
+
+
 function addItem() {
   const todoTitle = document.getElementById("todoTitle").value.trim();
   const todoDescription = document.getElementById("todoDescription").value.trim();
-  const dueDate = new Date(document.getElementById("dueDate").value); // Convert to Date object
+  const dueDate = new Date(document.getElementById("dueDate").value);
   const category = document.getElementById("category").value;
   const priority = document.getElementById("priority").value;
   const tags = document.getElementById("tags").value.trim();
@@ -100,29 +140,49 @@ function addItem() {
     alert("Please fill in all required fields.");
     return;
   }
-
+  const subtasks = subtasksArray;
+  console.log(subtasksArray)
   const newTodoItem = {
     title: todoTitle,
     description: todoDescription,
-    dueDate: dueDate, 
+    dueDate: dueDate,
     category: category,
     priority: priority,
     createdDate: new Date(),
     updateDate: new Date(),
     tags: tags.split(",").map(tag => tag.trim()),
+    subtasks: subtasks, // Add the subtasks array to the newTodoItem object
   };
 
-  todoItems.push(newTodoItem);
+  todoItems.push(newTodoItem); // Push the newTodoItem to the todoItems array
   saveTodoList();
-  renderTodoList();
+  renderTodoList(); // This will display the updated todo list with the new item and subtasks
 
+  // Clear the subtasksArray for the next Todo item
+  subtasksArray = [];
+
+  // Clear input fields
   document.getElementById("todoTitle").value = "";
   document.getElementById("todoDescription").value = "";
   document.getElementById("dueDate").value = "";
   document.getElementById("category").value = "";
   document.getElementById("priority").value = "";
   document.getElementById("tags").value = "";
+  subtasksArray = [];
+
+  // Clear the existing subtask inputs
+  const subtasksContainer = document.getElementById("subtasksContainer");
+  subtasksContainer.innerHTML = '';
+
+  // Add one empty subtask input
+  const newSubtaskInput = document.createElement("input");
+  newSubtaskInput.type = "text";
+  newSubtaskInput.className = "subtask-input";
+  newSubtaskInput.placeholder = `Subtask 1`;
+  subtasksContainer.appendChild(newSubtaskInput);
 }
+
+
 
 function deleteItem(index) {
   todoItems.splice(index, 1);
@@ -202,6 +262,13 @@ function markAsDoneOrUndone(index) {
   saveTodoList();
   renderTodoList();
 }
+// Add the following function in your script.js file
+function toggleSubtaskLineThrough(checkbox) {
+  const subtaskText = checkbox.nextElementSibling;
+  subtaskText.classList.toggle("subtask-done", checkbox.checked);
+}
+
+
 
 function renderTodoList(filteredItems = null) {
   const todoListContainer = document.getElementById("todoList");
@@ -216,7 +283,24 @@ function renderTodoList(filteredItems = null) {
     li.innerHTML = `
       Title: <input class="todo-title" type="text" value="${item.title}" disabled><br>
       Description: <input class="todo-description" type="text" value="${item.description}" disabled><br>
+      ${item.subtasks && item.subtasks.length > 0 ? `
+      <div class="todo-subtasks">
+        <h4>Subtasks:</h4>
+        <div class="subtask-input-container">
+          ${item.subtasks.map(subtask => `
+            <div>
+              <input type="checkbox" onchange="toggleSubtaskLineThrough(this)">
+              <span>${subtask}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>` : ""}
+    
+      <div class="miniContainer">
+      <div class="minicontainerdiv">
       Due Date: <input class="due-date" type="datetime-local" value="${getFormattedDateTime(item.dueDate)}" disabled><br>
+      </div>
+      <div class="minicontainerdiv">
       Category: <select class="category" disabled>
           <option value="work" ${item.category === 'work' ? 'selected' : ''}>Work</option>
           <option value="study" ${item.category === 'study' ? 'selected' : ''}>Study</option>
@@ -225,11 +309,15 @@ function renderTodoList(filteredItems = null) {
           <option value="personal" ${item.category === 'personal' ? 'selected' : ''}>Personal</option>
           <option value="hobby" ${item.category === 'hobby' ? 'selected' : ''}>Hobby</option>
         </select><br>
+        </div>
+        <div class="minicontainerdiv">
       Priority: <select class="priority" disabled>
           <option value="low" ${item.priority === 'low' ? 'selected' : ''}>Low</option>
           <option value="medium" ${item.priority === 'medium' ? 'selected' : ''}>Medium</option>
           <option value="high" ${item.priority === 'high' ? 'selected' : ''}>High</option>
         </select><br>
+        </div>
+        </div>
       Tags: <input class="tags" type="text" value="${item.tags.join(", ")}" disabled><br>
       <div class="btn">
       <button class="edit-button" onclick="editItem(${index})">Edit</button>
@@ -243,6 +331,11 @@ function renderTodoList(filteredItems = null) {
   });
 
 }
+
+
+
+
+
 function getFormattedDateTime(dateTime) {
   const year = dateTime.getFullYear();
   const month = `${dateTime.getMonth() + 1}`.padStart(2, "0");
