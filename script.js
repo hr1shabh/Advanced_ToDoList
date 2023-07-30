@@ -153,7 +153,46 @@ function addSubtask() {
 }
 
 
-// Rest of the code remains the same...
+let remindersArray = []; // Array to store reminders
+
+function addReminder() {
+  const remindersContainer = document.getElementById("remindersContainer");
+  const reminderInputs = remindersContainer.getElementsByClassName("reminder-input");
+
+  // Collect values of all reminder inputs
+  const reminderValues = [];
+  for (const input of reminderInputs) {
+    if (input.value.trim() !== '') {
+      reminderValues.push(new Date(input.value));
+    }
+  }
+
+  // Add the reminder values to the remindersArray
+  remindersArray = reminderValues;
+
+  // Clear the existing reminder inputs
+  remindersContainer.innerHTML = '';
+
+  // Re-create reminder inputs with updated values
+  for (let i = 0; i < remindersArray.length; i++) {
+    const reminderInput = document.createElement("input");
+    reminderInput.type = "datetime-local";
+    reminderInput.className = "reminder-input";
+    reminderInput.placeholder = `Reminder ${i + 1}`;
+    reminderInput.value = getFormattedDateTime(remindersArray[i]);
+    remindersContainer.appendChild(reminderInput);
+  }
+
+  // Add one additional empty reminder input
+  const newReminderInput = document.createElement("input");
+  newReminderInput.type = "datetime-local";
+  newReminderInput.className = "reminder-input";
+  newReminderInput.placeholder = `Reminder ${remindersArray.length + 1}`;
+  remindersContainer.appendChild(newReminderInput);
+}
+
+
+
 
 
 function addItem() {
@@ -169,7 +208,9 @@ function addItem() {
     return;
   }
   const subtasks = subtasksArray;
-  console.log(subtasksArray)
+
+  const reminders = remindersArray; 
+
   const newTodoItem = {
     title: todoTitle,
     description: todoDescription,
@@ -179,15 +220,14 @@ function addItem() {
     createdDate: new Date(),
     updateDate: new Date(),
     tags: tags.split(",").map(tag => tag.trim()),
-    subtasks: subtasks, // Add the subtasks array to the newTodoItem object
+    subtasks: subtasks,
+    reminders: reminders, // Add the reminders array to the newTodoItem object
+    done: false,
   };
 
-  todoItems.push(newTodoItem); // Push the newTodoItem to the todoItems array
+  todoItems.push(newTodoItem);
   saveTodoList();
-  renderTodoList(); // This will display the updated todo list with the new item and subtasks
-
-  // Clear the subtasksArray for the next Todo item
-  subtasksArray = [];
+  renderTodoList();
 
   // Clear input fields
   document.getElementById("todoTitle").value = "";
@@ -197,6 +237,7 @@ function addItem() {
   document.getElementById("priority").value = "";
   document.getElementById("tags").value = "";
   subtasksArray = [];
+  remindersArray = [];
 
   // Clear the existing subtask inputs
   const subtasksContainer = document.getElementById("subtasksContainer");
@@ -208,7 +249,18 @@ function addItem() {
   newSubtaskInput.className = "subtask-input";
   newSubtaskInput.placeholder = `Subtask 1`;
   subtasksContainer.appendChild(newSubtaskInput);
+
+  // Clear the existing reminder inputs
+  remindersContainer.innerHTML = '';
+
+  // Add one empty reminder input
+  const newReminderInput = document.createElement("input");
+  newReminderInput.type = "datetime-local";
+  newReminderInput.className = "reminder-input";
+  newReminderInput.placeholder = `Reminder 1`;
+  remindersContainer.appendChild(newReminderInput);
 }
+
 
 
 
@@ -220,7 +272,8 @@ function deleteItem(index) {
 
 function editItem(index) {
   const listItem = document.getElementById(`item-${index}`);
-  if (!listItem) return; // Check if the list item exists
+  if (!listItem) return;
+
   const todoTitle = listItem.querySelector(".todo-title");
   const todoDescription = listItem.querySelector(".todo-description");
   const dueDate = listItem.querySelector(".due-date");
@@ -229,7 +282,9 @@ function editItem(index) {
   const tags = listItem.querySelector(".tags");
   const editButton = listItem.querySelector(".edit-button");
   const saveButton = listItem.querySelector(".save-button");
+  const reminderInputs = listItem.querySelectorAll(".reminder"); // Get all reminder inputs
 
+  // Enable inputs for editing
   todoTitle.disabled = false;
   todoDescription.disabled = false;
   dueDate.disabled = false; 
@@ -237,9 +292,14 @@ function editItem(index) {
   priority.disabled = false;
   tags.disabled = false;
 
+  reminderInputs.forEach(input => {
+    input.disabled = false; // Enable reminder inputs
+  });
+
   editButton.style.display = "none";
   saveButton.style.display = "inline-block";
 }
+
 
 function saveItem(index) {
   const listItem = document.getElementById(`item-${index}`);
@@ -323,41 +383,69 @@ function renderTodoList(filteredItems = null) {
           `).join("")}
         </div>
       </div>` : ""}
-    
-      <div class="miniContainer">
-      <div class="minicontainerdiv">
-      Due Date: <input class="due-date" type="datetime-local" value="${getFormattedDateTime(item.dueDate)}" disabled><br>
+      
+      <div class="reminders-container">
+        ${item.reminders && item.reminders.length > 0 ? `
+          <h4>Reminders:</h4>
+          <div class="reminder-input-container">
+            ${item.reminders.map(reminder => `
+              <input class="reminder" type="datetime-local" value="${getFormattedDateTime(new Date(reminder))}" disabled>
+            `).join("")}
+          </div>
+        ` : ""}
       </div>
-      <div class="minicontainerdiv">
-      Category: <select class="category" disabled>
-          <option value="work" ${item.category === 'work' ? 'selected' : ''}>Work</option>
-          <option value="study" ${item.category === 'study' ? 'selected' : ''}>Study</option>
-          <option value="business" ${item.category === 'business' ? 'selected' : ''}>Business</option>
-          <option value="home" ${item.category === 'home' ? 'selected' : ''}>Home</option>
-          <option value="personal" ${item.category === 'personal' ? 'selected' : ''}>Personal</option>
-          <option value="hobby" ${item.category === 'hobby' ? 'selected' : ''}>Hobby</option>
-        </select><br>
+
+      <div class="miniContainer">
+        <div class="minicontainerdiv">
+          Due Date: <input class="due-date" type="datetime-local" value="${getFormattedDateTime(item.dueDate)}" disabled><br>
         </div>
         <div class="minicontainerdiv">
-      Priority: <select class="priority" disabled>
-          <option value="low" ${item.priority === 'low' ? 'selected' : ''}>Low</option>
-          <option value="medium" ${item.priority === 'medium' ? 'selected' : ''}>Medium</option>
-          <option value="high" ${item.priority === 'high' ? 'selected' : ''}>High</option>
-        </select><br>
+          Category: <select class="category" disabled>
+            <option value="work" ${item.category === 'work' ? 'selected' : ''}>Work</option>
+            <option value="study" ${item.category === 'study' ? 'selected' : ''}>Study</option>
+            <option value="business" ${item.category === 'business' ? 'selected' : ''}>Business</option>
+            <option value="home" ${item.category === 'home' ? 'selected' : ''}>Home</option>
+            <option value="personal" ${item.category === 'personal' ? 'selected' : ''}>Personal</option>
+            <option value="hobby" ${item.category === 'hobby' ? 'selected' : ''}>Hobby</option>
+          </select><br>
         </div>
+        <div class="minicontainerdiv">
+          Priority: <select class="priority" disabled>
+            <option value="low" ${item.priority === 'low' ? 'selected' : ''}>Low</option>
+            <option value="medium" ${item.priority === 'medium' ? 'selected' : ''}>Medium</option>
+            <option value="high" ${item.priority === 'high' ? 'selected' : ''}>High</option>
+          </select><br>
         </div>
+      </div>
+      
       Tags: <input class="tags" type="text" value="${item.tags.join(", ")}" disabled><br>
       <div class="btn">
-      <button class="edit-button" onclick="editItem(${index})">Edit</button>
-      <button class="save-button" style="display: none;" onclick="saveItem(${index})">Save</button>
-      <button class="delete-button" onclick="deleteItem(${index})">Delete</button> <!-- Delete button -->
-      <button class="mark-as-done-button" onclick="markAsDoneOrUndone(${index})">${item.done ? "Mark as Undone" : "Mark as Done"}</button>
-      <div/>
+        <button class="edit-button" onclick="editItem(${index})">Edit</button>
+        <button class="save-button" style="display: none;" onclick="saveItem(${index})">Save</button>
+        <button class="delete-button" onclick="deleteItem(${index})">Delete</button> <!-- Delete button -->
+        <button class="mark-as-done-button" onclick="markAsDoneOrUndone(${index})">${item.done ? "Mark as Undone" : "Mark as Done"}</button>
+      </div>
     `;
 
+    // Add event listeners to reminder inputs for editing
+    const reminderInputs = li.querySelectorAll(".reminder");
+    reminderInputs.forEach(input => {
+      input.addEventListener("input", handleReminderInputChange);
+    });
     todoListContainer.appendChild(li);
   });
+}
 
+function handleReminderInputChange(event) {
+  const index = parseInt(event.target.closest("li").id.split("-")[1]);
+  const reminderInputs = document.querySelectorAll(`#item-${index} .reminder`);
+
+  const reminders = [];
+  reminderInputs.forEach(input => {
+    reminders.push(new Date(input.value));
+  });
+
+  todoItems[index].reminders = reminders;
 }
 
 
@@ -417,7 +505,28 @@ function loadTodoList() {
     item.dueDate = new Date(item.dueDate);
   });
 }
+function checkReminders() {
+  const now = new Date();
+  const nowUpToMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
 
+  todoItems.forEach(item => {
+    if (item.reminders && item.reminders.length > 0) {
+      item.reminders.forEach(reminderStr => {
+        const reminder = new Date(reminderStr); // Convert reminder string to Date object
+        const reminderUpToMinute = new Date(reminder.getFullYear(), reminder.getMonth(), reminder.getDate(), reminder.getHours(), reminder.getMinutes());
+
+        if (nowUpToMinute.getTime() === reminderUpToMinute.getTime()) {
+          alert(`Reminder for "${item.title}"!`);
+        }
+      });
+    }
+  });
+}
+
+
+
+// Check reminders every minute (60000 milliseconds)
+setInterval(checkReminders, 60000);
 
 loadTodoList();
 renderTodoList();

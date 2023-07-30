@@ -300,3 +300,7 @@ li select {
 .add-reminder-button:hover {
   background-color: #45a049;
 }
+
+.reminders-container{
+  margin-bottom: 10px;
+}

@@ -57,7 +57,13 @@
   <div class="container">
     <input type="text" id="todoTitle" placeholder="Todo Title">
     <input type="text" id="todoDescription" placeholder="Todo Description">
-    
+    <label for="reminders">Reminders:</label>
+    <div class="reminders" id="remindersContainer">
+      <!-- Reminder input template -->
+      <input type="datetime-local" class="reminder-input" placeholder="Reminder 1">
+      <!-- Add more reminder inputs using JavaScript -->
+    </div>
+    <button class="add-reminder-button" onclick="addReminder()">Add Reminder</button>
     <label for="dueDate">Due Date:</label>
     <input type="datetime-local" id="dueDate">
     <label for="category">Category:</label>
