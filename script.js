@@ -369,7 +369,7 @@ function renderTodoList(filteredItems = null) {
     li.id = `item-${index}`;
     li.setAttribute("draggable", "true");
     li.innerHTML = `
-      Title: <input class="todo-title" type="text" value="${item.title}" disabled><br>
+      Title: <input class="todo-title ${item.done ? 'done' : ''}" type="text" value="${item.title}" disabled><br>
       Description: <input class="todo-description" type="text" value="${item.description}" disabled><br>
       ${item.subtasks && item.subtasks.length > 0 ? `
       <div class="todo-subtasks">

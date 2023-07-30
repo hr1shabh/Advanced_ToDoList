@@ -304,3 +304,7 @@ li select {
 .reminders-container{
   margin-bottom: 10px;
 }
+
+.done {
+  text-decoration: line-through;
+}

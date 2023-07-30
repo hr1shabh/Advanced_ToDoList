@@ -1,4 +1,5 @@
 # Advanced_ToDoList
-The only features left are: 
-1)date auto complete
-2)Reminders
+Implemented almost every features.
+Remaining features:
+1) Subtasks are not editable.
+2) Reminders cannot be added/deleted when in edit mode.
