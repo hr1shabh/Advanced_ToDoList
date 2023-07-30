@@ -244,8 +244,8 @@ li select {
 }
 
 /* Add the following CSS to your styles.css file */
-.todo-subtasks {
-  margin-top: 10px;
+h4{
+  margin: 0;
 }
 
 .subtask-input-container div {
@@ -302,6 +302,7 @@ li select {
 }
 
 .reminders-container{
+  display: flex;
   margin-bottom: 10px;
 }
 
